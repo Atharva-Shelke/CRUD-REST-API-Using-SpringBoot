@@ -100,9 +100,9 @@ POST /employees
 
 ```json
 {
-  "name": "Luffy",
-  "salary": 3000000000,
-  "role": "Captain"
+  "name": "Vinsmoke Sanji",
+  "salary": 1989679,
+  "role": "Cook"
 }
 ```
 
@@ -129,11 +129,12 @@ GET /employees/{id}
 ```
 PUT /employees/{id}
 ```
+for id = 3 :
 
 ```json
 {
   "name": "Zoro",
-  "salary": 1111000000,
+  "salary": 2141990,
   "role": "Vice Captain"
 }
 ```
