@@ -1,6 +1,20 @@
 # 📘 Employee Management App (Spring Boot + JDBC + PostgreSQL)
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![Deployed on Railway](https://img.shields.io/badge/Deployed-Railway-purple)
 
 A RESTful web service built using Spring Boot that demonstrates CRUD operations using **pure JDBC (JdbcTemplate)** with a **PostgreSQL** database.
+
+---
+
+## 🌐 Live Demo
+
+🔗 https://crud-rest-api-using-springboot-production.up.railway.app
+
+Try:
+- `/employees`
+- `/employees/{id}`
 
 ---
 
@@ -167,6 +181,13 @@ You can test APIs using:
 
 * Browser (GET endpoints)
 * Postman for full CRUD operations
+
+---
+
+## 🚀 Deployment
+
+- Backend hosted on Railway
+- Database hosted on PostgreSQL (Neon)
 
 ---
 
