@@ -1,5 +1,7 @@
 package com.employee.app;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,29 +9,27 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-	private final EmployeeDao dao;
-
-	public EmployeeService(EmployeeDao dao) {
-		this.dao = dao;
-	}
-
-	public void create(Employee emp) {
-		dao.save(emp);
-	}
+	@Autowired
+	private EmployeeRepository repository;
 
 	public List<Employee> getAll() {
-		return dao.findAll();
+
+		return repository.findAll(Sort.by("id").ascending());
+	}
+
+	public Employee create(Employee employee) {
+		return repository.save(employee);
 	}
 
 	public Employee getById(int id) {
-		return dao.findById(id);
+		return repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
 	}
 
 	public void update(Employee emp) {
-		dao.update(emp);
+		repository.save(emp);
 	}
 
 	public void delete(int id) {
-		dao.delete(id);
+		repository.deleteById(id);
 	}
 }
