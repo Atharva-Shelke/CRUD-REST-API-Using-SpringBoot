@@ -1,31 +1,47 @@
-# 📘 Employee Management App (Spring Boot + JDBC + PostgreSQL)
+# 📘 Employee Management API (Spring Boot + JPA + PostgreSQL)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-blue)
-![Deployed on Railway](https://img.shields.io/badge/Deployed-Railway-purple)
+![Hibernate](https://img.shields.io/badge/Hibernate-ORM-yellow)
+![Deployed on Render](https://img.shields.io/badge/Deployed-Render-purple)
 
-A RESTful web service built using Spring Boot that demonstrates CRUD operations using **pure JDBC (JdbcTemplate)** with a **PostgreSQL** database.
+A RESTful web service built using Spring Boot that demonstrates CRUD operations using **Spring Data JPA** with **Hibernate** and a **PostgreSQL** database.
 
 ---
 
 ## 🌐 Live Demo
 
-🔗 https://crud-rest-api-using-springboot-production.up.railway.app
+🔗 https://emp-mngmnt-api.onrender.com/health
 
 Try:
 - `/employees`
 - `/employees/{id}`
+- `/employees/page?page=0&size=2`
 
+> Note: The application may take a few seconds to respond on the first request due to free-tier cold starts.
 ---
 
 ## 📌 Features
 
 * Create, Read, Update, Delete (CRUD) operations
-* Uses Spring JDBC (JdbcTemplate) — no ORM (no JPA/Hibernate)
-* Manual SQL queries (demonstrates strong SQL fundamentals)
-* Cloud database integration (Neon / PostgreSQL)
+* Uses Spring Data JPA with Hibernate
+* Automatic ORM mapping between Java objects and database tables
+* Repository-based data access
+* Pagination and sorting support
+* Cloud-hosted PostgreSQL database (Neon)
 * Proper error handling with HTTP status responses
-* Clean layered architecture (Controller → Service → DAO)
+* Clean layered architecture (Controller → Service → Repository)
+
+---
+
+## ✨ JPA Features Demonstrated
+
+- Entity Mapping (`@Entity`)
+- Primary Key Generation (`@Id`, `@GeneratedValue`)
+- Repository Pattern (`JpaRepository`)
+- Pagination (`Pageable`, `PageRequest`)
+- Sorting (`Sort`)
+- Automatic SQL Generation via Hibernate
 
 ---
 
@@ -34,7 +50,8 @@ Try:
 * Java 17
 * Spring Boot
 * Spring Web
-* Spring JDBC (JdbcTemplate)
+* Spring Data JPA
+* Hibernate
 * PostgreSQL
 * Maven
 
@@ -46,12 +63,13 @@ Try:
 src/
  └── main/
      ├── java/com/employee/app/
-     │   ├── controller
-     │   ├── service
-     │   ├── dao
-     │   └── model
+     │   ├── controller                    # REST endpoints
+     │   ├── service                       # Business logic
+     │   ├── repository                    # Database access (JPA)
+     │   ├── entity                        # DB entity
+     │   └── EmployeeManagementApp.java    # Spring Boot entry point
      └── resources/
-         └── application.properties
+         └── application.properties        # Configuration file
 ```
 
 ---
@@ -61,6 +79,8 @@ src/
 This project uses PostgreSQL (cloud-hosted or local).
 
 ### Create Table
+
+> Hibernate can automatically create/update the table schema when the application starts.
 
 ```sql
 CREATE TABLE employee (
@@ -78,19 +98,31 @@ CREATE TABLE employee (
 Update `application.properties`:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://<host>:5432/<database>?sslmode=require
-spring.datasource.username=<username>
-spring.datasource.password=<password>
+# port for server
+server.port=${PORT:8088}
+
+# Database configuration
+spring.datasource.url=jdbc:postgresql://${DB_HOST}/${DB_NAME}?sslmode=require
+# sslmode=require is mandatory for Neon PostgreSQL
+
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
-server.port=8088
+# JPA configuration
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
 ```
 
 ---
 
 ## ▶️ Running the Application
 
-Using Maven Wrapper:
+### Using Maven Wrapper:
 
 ```bash
 ./mvnw spring-boot:run
@@ -102,15 +134,42 @@ Or:
 mvn spring-boot:run
 ```
 
+### Using Docker:
+
+#### Build Docker Image
+
+```bash
+docker build -t employee-management-api .
+```
+
+#### Run Docker Container
+
+```bash
+
+docker run -p 8088:8088 \
+-e DB_HOST=<host> \
+-e DB_NAME=<database> \
+-e DB_USERNAME=<username> \
+-e DB_PASSWORD=<password> \
+employee-management-api
+```
+
 ---
 
 ## 🌐 API Endpoints
 
-### ➕ Create Employee
+| Method | Endpoint | Description |
+|--------|----------|------------|
+| POST   | `/employees` | Create a new employee |
+| GET    | `/employees` | Get all employees |
+| GET    | `/employees/{id}` | Get employee by ID |
+| GET    | `/employees/page?page=0&size=2` | Get employees with Pagination |
+| PUT    | `/employees/{id}` | Update employee |
+| DELETE | `/employees/{id}` | Delete employee |
 
-```
-POST /employees
-```
+---
+
+### 📌 Sample Request
 
 ```json
 {
@@ -120,46 +179,35 @@ POST /employees
 }
 ```
 
----
+### 📷 Sample Response
 
-### 📄 Get All Employees
+#### 📄 Get Employees
 
-```
-GET /employees
-```
+![Get Employees](screenshots/getEmployees.png)
 
----
+#### 🔍 Get Employees By ID
 
-### 🔍 Get Employee by ID
+![Get Employees By ID](screenshots/getEmployeesById.png)
 
-```
-GET /employees/{id}
-```
+#### 📄 Get Employees Page
 
----
+![Get Employees Page](screenshots/getEmployeesPage.png)
 
-### ✏️ Update Employee
+#### 📄 Empty Page
 
-```
-PUT /employees/{id}
-```
-for id = 3 :
+![Empty Page](screenshots/getEmployeesEmptyPage.png)
 
-```json
-{
-  "name": "Zoro",
-  "salary": 2141990,
-  "role": "Vice Captain"
-}
-```
+#### ➕ Create Employee
 
----
+![Create Employee](screenshots/createEmployee.png)
 
-### ❌ Delete Employee
+#### ✏️ Update Employee
 
-```
-DELETE /employees/{id}
-```
+![Update Employee](screenshots/updateEmployee.png)
+
+#### ❌ Delete Employee
+
+![Delete Employee](screenshots/deleteEmployee.png)
 
 ---
 
@@ -168,6 +216,7 @@ DELETE /employees/{id}
 * Returns meaningful messages when:
 
   * Employee ID does not exist
+
 * Uses HTTP status codes:
 
   * `200 OK`
@@ -186,11 +235,13 @@ You can test APIs using:
 
 ## 🚀 Deployment
 
-- Backend hosted on Railway
-- Database hosted on PostgreSQL (Neon)
+* Containerized using Docker
+* Backend hosted on Render
+* Database hosted on Neon PostgreSQL
+* Environment-variable based configuration
 
 ---
 
 ## 📌 Note
 
-This project is intentionally implemented using **JDBC instead of JPA** to demonstrate strong SQL and database handling skills.
+This project is implemented using **Spring Data JPA** and **Hibernate** to demonstrate ORM concepts, repository-based data access, and modern Spring Boot development practices.
