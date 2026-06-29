@@ -1,4 +1,4 @@
-# 📘 Employee Management API (Spring Boot + JPA + PostgreSQL)
+﻿# 📘 Employee Management API (Spring Boot + JPA + PostgreSQL)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-blue)
@@ -14,9 +14,9 @@ A RESTful web service built using Spring Boot that demonstrates CRUD operations 
 🔗 https://emp-mngmnt-api.onrender.com/health
 
 Try:
-- `/employees`
-- `/employees/{id}`
-- `/employees/page?page=0&size=2`
+- `/employees`: https://emp-mngmnt-api.onrender.com/employees
+- `/employees/{id}`: https://emp-mngmnt-api.onrender.com/employees/1
+- `/employees/page?page=0&size=2`: https://emp-mngmnt-api.onrender.com/employees/page?page=0&size=2
 
 > Note: The application may take a few seconds to respond on the first request due to free-tier cold starts.
 ---
